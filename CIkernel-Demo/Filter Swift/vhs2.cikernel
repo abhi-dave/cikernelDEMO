@@ -1,0 +1,26 @@
+//Converted From IF PART OF https://www.shadertoy.com/view/4scBRH
+
+kernel vec4 vhs(__sample image, float time){
+
+    float amount = sin(time) * 0.1;
+    vec2 uv = destCoord();
+
+    amount *= 0.3;
+    float split = 1. - fract(time / 2.);
+    float scanOffset = 0.01;
+    vec2 uv1 = vec2(uv.x + amount, uv.y);
+    vec2 uv2 = vec2(uv.x, uv.y + amount);
+    if (uv.y > split) {
+        uv.x += scanOffset;
+        uv1.x += scanOffset;
+        uv2.x += scanOffset;
+    }
+
+    float r = sample(image, samplerTransform(image, uv1)).r;
+    float g = sample(image, samplerTransform(image, uv)).g;
+    float b = sample(image, samplerTransform(image, uv2)).b;
+
+
+    // return sample(image, uv);
+     return vec4(r,g,b, 1.0);
+}
